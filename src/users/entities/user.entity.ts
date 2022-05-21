@@ -1,5 +1,5 @@
 import {
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   Entity,
   Column,
   CreateDateColumn,
@@ -8,7 +8,7 @@ import {
 
 @Entity()
 export class User {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ type: 'varchar' })
