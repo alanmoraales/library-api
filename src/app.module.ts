@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from 'database';
+import { AuthModule } from 'auth';
+import { UsersModule } from 'users';
 import config from 'config';
 import environments from 'environments';
 
@@ -12,6 +14,8 @@ import environments from 'environments';
       isGlobal: true,
     }),
     DatabaseModule,
+    AuthModule,
+    UsersModule,
   ],
 })
 export class AppModule {}
