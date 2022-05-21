@@ -23,4 +23,8 @@ export class AuthService {
     };
     return this.jwtService.sign(payload);
   }
+
+  async comparePassword(password: string, hashedPassword: string) {
+    return await bcrypt.compare(password, hashedPassword);
+  }
 }
