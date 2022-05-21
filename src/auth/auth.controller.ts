@@ -5,11 +5,12 @@ import {
   HttpCode,
   HttpStatus,
   BadRequestException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UsersService } from 'users';
 import { AuthService } from './auth.service';
-import { RegisterUserDto } from './dtos';
+import { LoginUserDto, RegisterUserDto } from './dtos';
 import { AuthResponse } from './interfaces';
 
 @ApiTags('Authentication')
@@ -44,6 +45,41 @@ export class AuthController {
       email,
       name,
     });
+    const token = this.authService.getJWTForUser(user.id);
+    delete user['password'];
+    return {
+      user,
+      token,
+    };
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Haz iniciado sesión',
+    type: AuthResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'El correo no está registrado',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Correo o contraseña incorrecta',
+  })
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  async loginUser(@Body() { password, email }: LoginUserDto) {
+    const user = await this.usersService.findOneByEmail(email);
+    if (!user) {
+      throw new BadRequestException('El correo no está registrado');
+    }
+    const passwordMatch = await this.authService.comparePassword(
+      password,
+      user.password,
+    );
+    if (!passwordMatch) {
+      throw new UnauthorizedException('Correo o contraseña incorrecta');
+    }
     const token = this.authService.getJWTForUser(user.id);
     delete user['password'];
     return {
