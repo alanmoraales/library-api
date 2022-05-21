@@ -17,4 +17,9 @@ export class UsersService {
     const user = this.usersRepo.create(userPayload);
     return await this.usersRepo.save(user);
   }
+
+  async findOneByEmail(email: string) {
+    const foundUsers = await this.usersRepo.find({ email });
+    return foundUsers[0];
+  }
 }
