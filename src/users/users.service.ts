@@ -54,4 +54,8 @@ export class UsersService {
     const cartItem = this.cartItemsRepo.create({ cart, book, quantity });
     return await this.cartItemsRepo.save(cartItem);
   }
+
+  async removeCartItem(cartItem: CartItem) {
+    return await this.cartItemsRepo.remove([cartItem]);
+  }
 }

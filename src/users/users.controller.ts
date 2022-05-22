@@ -6,12 +6,13 @@ import {
   Post,
   Body,
   BadRequestException,
+  Delete,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'auth/guards';
 import { BooksService } from 'books/books.service';
 import { Request as ExpressRequest } from 'express';
-import { AddBookToCartDto } from './dtos';
+import { AddBookToCartDto, RemoveBookFormCartDto } from './dtos';
 import { User } from './entities';
 import { UsersService } from './users.service';
 
@@ -67,6 +68,27 @@ export class UsersController {
     }
     book.availableQuantity = book.availableQuantity - quantity;
     await this.booksService.saveBook(book);
+    return await this.userService.findUserCart(user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('cart')
+  async removeBookFromCart(
+    @Request() req: ExpressRequest,
+    @Body() { bookId }: RemoveBookFormCartDto,
+  ) {
+    const user = req.user as User;
+    const userCart = await this.userService.findUserCart(user.id);
+    const cartItemWithBookInCart = userCart.items.find(
+      (cartItem) => cartItem.book.id === bookId,
+    );
+    if (cartItemWithBookInCart) {
+      const book = await this.booksService.findOneById(bookId);
+      book.availableQuantity =
+        book.availableQuantity + cartItemWithBookInCart.quantity;
+      await this.booksService.saveBook(book);
+      await this.userService.removeCartItem(cartItemWithBookInCart);
+    }
     return await this.userService.findUserCart(user.id);
   }
 }
