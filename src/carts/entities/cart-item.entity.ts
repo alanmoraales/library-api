@@ -1,4 +1,3 @@
-import { Book } from 'books/entities';
 import {
   PrimaryGeneratedColumn,
   Entity,
@@ -7,6 +6,8 @@ import {
   UpdateDateColumn,
   ManyToOne,
 } from 'typeorm';
+import { Book } from 'books/entities';
+import { Reserve } from 'reserve/entities';
 import { Cart } from './cart.entity';
 
 @Entity()
@@ -22,6 +23,9 @@ export class CartItem {
 
   @Column({ type: 'int' })
   quantity: number;
+
+  @ManyToOne(() => Reserve, (reserve) => reserve.items)
+  reserve: Reserve;
 
   @CreateDateColumn({
     type: 'timestamptz',
