@@ -15,5 +15,12 @@ export default registerAs('config', () => {
       secret: process.env.JWT_SECRET_KEY,
       expiresIn: process.env.JWT_EXPIRATION,
     },
+    mailgun: {
+      auth: {
+        api_key: process.env.MAILGUN_API_KEY,
+        domain: process.env.MAILGUN_EMAIL_DOMAIN,
+      },
+      fromAddress: process.env.MAILGUN_FROM_ADDRESS,
+    },
   };
 });
