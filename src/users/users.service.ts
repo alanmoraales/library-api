@@ -9,7 +9,7 @@ export class UsersService {
   constructor(@InjectRepository(User) private usersRepo: Repository<User>) {}
 
   async isRegisteredEmail(email: string) {
-    const foundUsers = await this.usersRepo.find({ email });
+    const foundUsers = await this.usersRepo.find({ where: { email } });
     return Boolean(foundUsers.length);
   }
 
@@ -19,7 +19,7 @@ export class UsersService {
   }
 
   async findOneByEmail(email: string) {
-    const foundUsers = await this.usersRepo.find({ email });
+    const foundUsers = await this.usersRepo.find({ where: { email } });
     return foundUsers[0];
   }
 }
