@@ -1,11 +1,9 @@
-import { CartItem } from 'carts/entities/cart-item.entity';
 import {
   PrimaryGeneratedColumn,
   Entity,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -24,9 +22,6 @@ export class Book {
 
   @Column({ type: 'int' })
   availableQuantity: number;
-
-  @OneToMany(() => CartItem, (cartItem) => cartItem.book)
-  cartItems: CartItem[];
 
   @CreateDateColumn({
     type: 'timestamptz',
