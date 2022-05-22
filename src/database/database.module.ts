@@ -20,6 +20,7 @@ import config from 'config';
           return {
             type: 'postgres',
             url,
+            ssl: { require: true, rejectUnauthorized: false },
             ...baseConfig,
           };
         }
