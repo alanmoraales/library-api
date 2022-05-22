@@ -9,13 +9,6 @@ module.exports = {
   synchronize: false,
   entities: ['src/**/*.entity.ts'],
   ssl: Boolean(process.env.DATABASE_URL),
-  extra: Boolean(process.env.DATABASE_URL)
-    ? {
-        ssl: {
-          rejectUnauthorized: false,
-        },
-      }
-    : null,
   migrationsTableName: 'migrations',
   migrations: ['src/database/migrations/*.ts'],
   cli: {
