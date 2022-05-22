@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
-    "postinstall": "npm run migrations:run && npm run prestart:prod",
+    "postinstall": "npm run migrations:run && npm run seed:run && npm run prestart:prod",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
