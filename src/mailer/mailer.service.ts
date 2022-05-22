@@ -18,6 +18,7 @@ export class MailerService {
         context: {
           username,
         },
+        // @ts-ignore
         attachments: [
           {
             filename: 'qr-code.png',
