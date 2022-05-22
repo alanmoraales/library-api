@@ -58,4 +58,8 @@ export class UsersService {
   async removeCartItem(cartItem: CartItem) {
     return await this.cartItemsRepo.remove([cartItem]);
   }
+
+  async saveUserCart(userCart: Cart) {
+    return await this.cartsRepo.save(userCart);
+  }
 }
