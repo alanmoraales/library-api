@@ -10,4 +10,12 @@ export class BooksService {
   async getAllBooks() {
     return await this.booksRepo.find();
   }
+
+  async findOneById(bookId: number) {
+    return await this.booksRepo.findOne(bookId);
+  }
+
+  async saveBook(book: Book) {
+    return await this.booksRepo.save(book);
+  }
 }

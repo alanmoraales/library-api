@@ -1,14 +1,27 @@
-import { Controller, Get, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  UseGuards,
+  Request,
+  Post,
+  Body,
+  BadRequestException,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'auth/guards';
+import { BooksService } from 'books/books.service';
 import { Request as ExpressRequest } from 'express';
+import { AddBookToCartDto } from './dtos';
 import { User } from './entities';
 import { UsersService } from './users.service';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private userService: UsersService) {}
+  constructor(
+    private userService: UsersService,
+    private booksService: BooksService,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
@@ -22,5 +35,38 @@ export class UsersController {
     const user = req.user as User;
     const userCart = await this.userService.findUserCart(user.id);
     return userCart;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('cart')
+  async addBookToCart(
+    @Request() req: ExpressRequest,
+    @Body() { bookId, quantity }: AddBookToCartDto,
+  ) {
+    const user = req.user as User;
+    const book = await this.booksService.findOneById(bookId);
+    if (!(quantity <= book.availableQuantity)) {
+      throw new BadRequestException(
+        'No hay suficientes piezas disponibles de este libro',
+      );
+    }
+    const userCart = await this.userService.findUserCart(user.id);
+    const cartItemWithBookInCart = userCart.items.find(
+      (cartItem) => cartItem.book.id === bookId,
+    );
+    const cartItem =
+      cartItemWithBookInCart ||
+      (await this.userService.createAndSaveCartItem({
+        book,
+        cart: userCart,
+        quantity,
+      }));
+    if (cartItemWithBookInCart) {
+      cartItem.quantity = cartItem.quantity + quantity;
+      await this.userService.saveCartItem(cartItem);
+    }
+    book.availableQuantity = book.availableQuantity - quantity;
+    await this.booksService.saveBook(book);
+    return await this.userService.findUserCart(user.id);
   }
 }

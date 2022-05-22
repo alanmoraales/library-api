@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Cart } from 'carts/entities';
+import { Cart, CartItem } from 'carts/entities';
 import { FindOneOptions, Repository } from 'typeorm';
 import { User } from './entities';
 import { ICreateUser } from './interfaces';
@@ -10,6 +10,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User) private usersRepo: Repository<User>,
     @InjectRepository(Cart) private cartsRepo: Repository<Cart>,
+    @InjectRepository(CartItem) private cartItemsRepo: Repository<CartItem>,
   ) {}
 
   async isRegisteredEmail(email: string) {
@@ -40,8 +41,17 @@ export class UsersService {
   async findUserCart(userId: number) {
     const user = await this.finOneById(userId, { relations: ['cart'] });
     const userCart = await this.cartsRepo.findOne(user.cart.id, {
-      relations: ['items'],
+      relations: ['items', 'items.book'],
     });
     return userCart;
+  }
+
+  async saveCartItem(cartItem: CartItem) {
+    return await this.cartItemsRepo.save(cartItem);
+  }
+
+  async createAndSaveCartItem({ cart, book, quantity }) {
+    const cartItem = this.cartItemsRepo.create({ cart, book, quantity });
+    return await this.cartItemsRepo.save(cartItem);
   }
 }
