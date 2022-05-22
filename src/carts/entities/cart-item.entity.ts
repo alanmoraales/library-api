@@ -15,9 +15,9 @@ export class CartItem {
   id: number;
 
   @ManyToOne(() => Cart, (cart) => cart.items)
-  cart: number;
+  cart: Cart;
 
-  @ManyToOne(() => Book, (book) => book.cartItems)
+  @ManyToOne(() => Book)
   book: Book;
 
   @Column({ type: 'int' })
