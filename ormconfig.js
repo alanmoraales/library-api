@@ -12,7 +12,6 @@ module.exports = {
   extra: Boolean(process.env.DATABASE_URL)
     ? {
         ssl: {
-          require: true,
           rejectUnauthorized: false,
         },
       }
