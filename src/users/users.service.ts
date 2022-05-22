@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cart } from 'carts/entities';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { User } from './entities';
 import { ICreateUser } from './interfaces';
 
@@ -9,7 +9,7 @@ import { ICreateUser } from './interfaces';
 export class UsersService {
   constructor(
     @InjectRepository(User) private usersRepo: Repository<User>,
-    @InjectRepository(Cart) private cartRepo: Repository<Cart>,
+    @InjectRepository(Cart) private cartsRepo: Repository<Cart>,
   ) {}
 
   async isRegisteredEmail(email: string) {
@@ -19,8 +19,8 @@ export class UsersService {
 
   async createAndSaveUser(userPayload: ICreateUser) {
     const user = this.usersRepo.create(userPayload);
-    const userCart = this.cartRepo.create();
-    await this.cartRepo.save(userCart);
+    const userCart = this.cartsRepo.create();
+    await this.cartsRepo.save(userCart);
     user.cart = userCart;
     return await this.usersRepo.save(user);
   }
@@ -31,5 +31,17 @@ export class UsersService {
       relations: ['cart'],
     });
     return foundUsers[0];
+  }
+
+  async finOneById(userId: number, options?: FindOneOptions<User>) {
+    return await this.usersRepo.findOne(userId, options);
+  }
+
+  async findUserCart(userId: number) {
+    const user = await this.finOneById(userId, { relations: ['cart'] });
+    const userCart = await this.cartsRepo.findOne(user.cart.id, {
+      relations: ['items'],
+    });
+    return userCart;
   }
 }
