@@ -1,6 +1,6 @@
 import { Factory, Seeder } from 'typeorm-seeding';
 import { Connection } from 'typeorm';
-import { Book } from '../../books/entities';
+import { Book } from '../../books/entities/book.entity';
 import books from '../data/books.data';
 
 export default class CreateBooks implements Seeder {
