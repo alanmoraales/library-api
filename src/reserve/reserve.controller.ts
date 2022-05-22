@@ -6,6 +6,7 @@ import { JwtAuthGuard } from 'auth/guards';
 import { Request as ExpressRequest } from 'express';
 import { ReserveService } from './reserve.service';
 import * as QRCode from 'qrcode';
+import { MailerService } from 'mailer';
 
 @ApiTags('Reserve')
 @Controller('reserves')
@@ -13,6 +14,7 @@ export class ReserveController {
   constructor(
     private userService: UsersService,
     private reserveService: ReserveService,
+    private mailerService: MailerService,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -26,8 +28,12 @@ export class ReserveController {
     );
     userCart.items = [];
     await this.userService.saveUserCart(userCart);
-    const qrCode = await QRCode.toString(`${reserve.id}`, { type: 'terminal' });
-    console.log(qrCode);
+    const qrCode = await QRCode.toDataURL(`${reserve.id}`);
+    await this.mailerService.sendReservationEmail(
+      user.email,
+      user.name,
+      qrCode,
+    );
     return reserve;
   }
 

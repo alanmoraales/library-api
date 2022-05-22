@@ -5,6 +5,7 @@ import { AuthModule } from 'auth';
 import { UsersModule } from 'users';
 import { BooksModule } from 'books';
 import { CartsModule } from 'carts';
+import { MailerModule } from 'mailer';
 import { ReserveModule } from 'reserve';
 import config from 'config';
 import environments from 'environments';
@@ -22,6 +23,7 @@ import environments from 'environments';
     BooksModule,
     CartsModule,
     ReserveModule,
+    MailerModule,
   ],
 })
 export class AppModule {}
