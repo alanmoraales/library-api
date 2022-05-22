@@ -1,32 +1,27 @@
-import { CartItem } from 'carts/entities/cart-item.entity';
+import { Book } from 'books/entities';
 import {
   PrimaryGeneratedColumn,
   Entity,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
+  ManyToOne,
 } from 'typeorm';
+import { Cart } from './cart.entity';
 
 @Entity()
-export class Book {
+export class CartItem {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar' })
-  title: string;
+  @ManyToOne(() => Cart, (cart) => cart.items)
+  cart: number;
 
-  @Column({ type: 'varchar' })
-  imageUrl: string;
-
-  @Column({ type: 'varchar' })
-  description: string;
+  @ManyToOne(() => Book, (book) => book.cartItems)
+  book: Book;
 
   @Column({ type: 'int' })
-  availableQuantity: number;
-
-  @OneToMany(() => CartItem, (cartItem) => cartItem.book)
-  cartItems: CartItem[];
+  quantity: number;
 
   @CreateDateColumn({
     type: 'timestamptz',

@@ -1,9 +1,12 @@
+import { Cart } from 'carts/entities/cart.entity';
 import {
   PrimaryGeneratedColumn,
   Entity,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -19,6 +22,10 @@ export class User {
 
   @Column({ type: 'varchar' })
   password: string;
+
+  @OneToOne(() => Cart)
+  @JoinColumn()
+  cart: Cart;
 
   @CreateDateColumn({
     type: 'timestamptz',
