@@ -11,4 +11,9 @@ export class PaginatedBooksQueryDto {
   @IsString()
   @IsOptional()
   readonly limit: string;
+
+  @ApiPropertyOptional({ example: 'harry' })
+  @IsString()
+  @IsOptional()
+  readonly search?: string;
 }

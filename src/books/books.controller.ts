@@ -25,8 +25,15 @@ export class BooksController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async getPaginatedBooks(
-    @Query() { page = '1', limit = '10' }: PaginatedBooksQueryDto,
+    @Query() { page = '1', limit = '10', search }: PaginatedBooksQueryDto,
   ): Promise<Pagination<Book>> {
+    if (search) {
+      const queryBuilder = this.booksRepository
+        .createQueryBuilder()
+        .select()
+        .where('title ILIKE :searchTerm', { searchTerm: `%${search}%` });
+      return paginate<Book>(queryBuilder, { page, limit });
+    }
     return paginate<Book>(this.booksRepository, { page, limit });
   }
 
