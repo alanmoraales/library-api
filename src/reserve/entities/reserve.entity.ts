@@ -7,9 +7,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CartItem } from 'carts/entities';
-import { User } from 'users/entities';
-import { EReserveStatus } from 'reserve/enums';
+import { CartItem } from '../../carts/entities';
+import { User } from '../../users/entities';
+import { EReserveStatus } from '../../reserve/enums';
 
 @Entity()
 export class Reserve {

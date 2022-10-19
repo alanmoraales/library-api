@@ -6,8 +6,8 @@ import {
   UpdateDateColumn,
   ManyToOne,
 } from 'typeorm';
-import { Book } from 'books/entities';
-import { Reserve } from 'reserve/entities';
+import { Book } from '../../books/entities';
+import { Reserve } from '../../reserve/entities';
 import { Cart } from './cart.entity';
 
 @Entity()
