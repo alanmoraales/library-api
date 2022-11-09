@@ -17,6 +17,20 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type PaginationMeta {
+  totalItems: Int!
+  itemCount: Int!
+  itemsPerPage: Int!
+  totalPages: Int!
+  currentPage: Int!
+}
+
+type PaginatedBooksResponse {
+  items: [Book!]!
+  meta: PaginationMeta!
+}
+
 type Query {
-  books(page: Float!, limit: Float!, search: String!): [Book!]!
+  allBooks: [Book!]!
+  paginatedBooks(page: Float!, limit: Float!, search: String!): PaginatedBooksResponse!
 }

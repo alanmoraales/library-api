@@ -1,19 +1,28 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IBookResponse } from './book-response.interface';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Book } from 'books/entities';
 
-interface IPaginationMeta {
+@ObjectType()
+class PaginationMeta {
+  @Field(() => Int)
   totalItems: number;
+  @Field(() => Int)
   itemCount: number;
+  @Field(() => Int)
   itemsPerPage: number;
+  @Field(() => Int)
   totalPages: number;
+  @Field(() => Int)
   currentPage: number;
 }
 
 export interface IPaginatedBooksResponse {
   items: IBookResponse[];
-  meta: IPaginationMeta;
+  meta: PaginationMeta;
 }
 
+@ObjectType()
 export class PaginatedBooksResponse implements IPaginatedBooksResponse {
   @ApiProperty({
     example: [
@@ -29,6 +38,7 @@ export class PaginatedBooksResponse implements IPaginatedBooksResponse {
     ],
     isArray: true,
   })
+  @Field(() => [Book])
   items: IBookResponse[];
 
   @ApiProperty({
@@ -40,5 +50,6 @@ export class PaginatedBooksResponse implements IPaginatedBooksResponse {
       currentPage: 1,
     },
   })
-  meta: IPaginationMeta;
+  @Field(() => PaginationMeta)
+  meta: PaginationMeta;
 }
