@@ -30,7 +30,24 @@ type PaginatedBooksResponse {
   meta: PaginationMeta!
 }
 
+type UserResponse {
+  id: Int!
+  name: String!
+  email: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type AuthResponse {
+  user: UserResponse!
+  token: String!
+}
+
 type Query {
   allBooks: [Book!]!
   paginatedBooks(page: Float!, limit: Float!, search: String!): PaginatedBooksResponse!
+}
+
+type Mutation {
+  registerUser(name: String!, email: String!, password: String!): AuthResponse!
 }

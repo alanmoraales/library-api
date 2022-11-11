@@ -1,12 +1,9 @@
 import { UserResponse } from 'users/interfaces';
 import { ApiProperty } from '@nestjs/swagger';
+import { Field, ObjectType } from '@nestjs/graphql';
 
-export interface IAuthResponse {
-  user: UserResponse;
-  token: string;
-}
-
-export class AuthResponse implements IAuthResponse {
+@ObjectType()
+export class AuthResponse {
   @ApiProperty({
     example: {
       id: 1,
@@ -16,7 +13,10 @@ export class AuthResponse implements IAuthResponse {
       updatedAt: new Date(),
     },
   })
+  @Field(() => UserResponse)
   user: UserResponse;
+
   @ApiProperty({ example: 'eyJhbGjhdOiJIUFihsiIsInR5bgI6IrgFsCJ9' })
+  @Field()
   token: string;
 }
