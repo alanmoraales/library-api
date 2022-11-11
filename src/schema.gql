@@ -50,4 +50,5 @@ type Query {
 
 type Mutation {
   registerUser(name: String!, email: String!, password: String!): AuthResponse!
+  loginUser(email: String!, password: String!): AuthResponse!
 }

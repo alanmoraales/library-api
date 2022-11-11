@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { UsersService } from 'users';
 import { AuthService } from './auth.service';
@@ -29,6 +29,30 @@ export class AuthResolver {
       email,
       name,
     });
+    const token = this.authService.getJWTForUser(user.id);
+    delete user['password'];
+    return {
+      user,
+      token,
+    };
+  }
+
+  @Mutation(() => AuthResponse)
+  async loginUser(
+    @Args('email') email: string,
+    @Args('password') password: string,
+  ) {
+    const user = await this.usersService.findOneByEmail(email);
+    if (!user) {
+      throw new BadRequestException('El correo no está registrado');
+    }
+    const passwordMatch = await this.authService.comparePassword(
+      password,
+      user.password,
+    );
+    if (!passwordMatch) {
+      throw new UnauthorizedException('Correo o contraseña incorrecta');
+    }
     const token = this.authService.getJWTForUser(user.id);
     delete user['password'];
     return {
