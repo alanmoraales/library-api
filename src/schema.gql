@@ -17,6 +17,14 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Reserve {
+  id: Int!
+  items: [CartItem!]!
+  status: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Cart {
   id: Int!
   items: [CartItem!]!
@@ -63,6 +71,7 @@ type Query {
   cart: Cart!
   allBooks: [Book!]!
   paginatedBooks(page: Float!, limit: Float!, search: String!): PaginatedBooksResponse!
+  reserves: [Reserve!]!
 }
 
 type Mutation {
@@ -70,4 +79,5 @@ type Mutation {
   loginUser(email: String!, password: String!): AuthResponse!
   addBookToCart(bookId: Float!, quantity: Float!): Cart!
   removeBookFromCart(bookId: Float!): Cart!
+  createReserve: Reserve!
 }
