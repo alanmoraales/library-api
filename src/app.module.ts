@@ -1,5 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { join } from 'path';
 import { DatabaseModule } from 'database';
 import { AuthModule } from 'auth';
 import { UsersModule } from 'users';
@@ -24,6 +27,11 @@ import environments from 'environments';
     CartsModule,
     ReserveModule,
     MailerModule,
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      playground: true,
+    }),
   ],
 })
 export class AppModule {}

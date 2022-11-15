@@ -1,0 +1,83 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Book {
+  id: Int!
+  title: String!
+  imageUrl: String!
+  description: String!
+  availableQuantity: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Reserve {
+  id: Int!
+  items: [CartItem!]!
+  status: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Cart {
+  id: Int!
+  items: [CartItem!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CartItem {
+  id: Int!
+  book: Book!
+  quantity: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type PaginationMeta {
+  totalItems: Int!
+  itemCount: Int!
+  itemsPerPage: Int!
+  totalPages: Int!
+  currentPage: Int!
+}
+
+type PaginatedBooksResponse {
+  items: [Book!]!
+  meta: PaginationMeta!
+}
+
+type UserResponse {
+  id: Int!
+  name: String!
+  email: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type AuthResponse {
+  user: UserResponse!
+  token: String!
+}
+
+type Query {
+  me: UserResponse!
+  cart: Cart!
+  allBooks: [Book!]!
+  paginatedBooks(page: Float!, limit: Float!, search: String!): PaginatedBooksResponse!
+  reserves: [Reserve!]!
+}
+
+type Mutation {
+  registerUser(name: String!, email: String!, password: String!): AuthResponse!
+  loginUser(email: String!, password: String!): AuthResponse!
+  addBookToCart(bookId: Float!, quantity: Float!): Cart!
+  removeBookFromCart(bookId: Float!): Cart!
+  createReserve: Reserve!
+}
