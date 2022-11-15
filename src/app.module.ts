@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigType } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ApolloDriver } from '@nestjs/apollo';
 import { join } from 'path';
 import { DatabaseModule } from 'database';
 import { AuthModule } from 'auth';
@@ -27,10 +27,14 @@ import environments from 'environments';
     CartsModule,
     ReserveModule,
     MailerModule,
-    GraphQLModule.forRoot<ApolloDriverConfig>({
+    GraphQLModule.forRootAsync({
+      inject: [config.KEY],
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      playground: true,
+      useFactory: (configService: ConfigType<typeof config>) => ({
+        autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+        playground: true,
+        introspection: configService.graphQLServer.allowIntrospection,
+      }),
     }),
   ],
 })
