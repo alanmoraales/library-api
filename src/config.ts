@@ -22,5 +22,8 @@ export default registerAs('config', () => {
       },
       fromAddress: process.env.MAILGUN_FROM_ADDRESS,
     },
+    graphQLServer: {
+      allowIntrospection: Boolean(process.env.ALLOW_INTROSPECTION),
+    },
   };
 });
