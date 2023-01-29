@@ -20,11 +20,27 @@ export class Book {
 
   @Column({ type: 'varchar' })
   @Field()
-  imageUrl: string;
+  slug: string;
 
   @Column({ type: 'varchar' })
   @Field()
-  description: string;
+  coverSrc: string;
+
+  @Column({ type: 'varchar' })
+  @Field()
+  synopsis: string;
+
+  @Column({ type: 'varchar' })
+  @Field()
+  author: string;
+
+  @Column({ type: 'int' })
+  @Field(() => Int)
+  year: number;
+
+  @Column({ type: 'varchar' })
+  @Field()
+  collection: string;
 
   @Column({ type: 'int' })
   @Field(() => Int)
