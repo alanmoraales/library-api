@@ -5,8 +5,12 @@
 type Book {
   id: Int!
   title: String!
-  imageUrl: String!
-  description: String!
+  slug: String!
+  coverSrc: String!
+  synopsis: String!
+  author: String!
+  year: Int!
+  collection: String!
   availableQuantity: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
